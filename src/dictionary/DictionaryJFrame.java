@@ -12,24 +12,26 @@ import javax.swing.DefaultListModel;
  * @author Thanh Tung Hoang
  */
 public class DictionaryJFrame extends javax.swing.JFrame {
-    DefaultListModel listModel;
+    private final DefaultListModel listModel;
+    
 
     /**
      * Creates new form DictionaryJFrame
      */
     public DictionaryJFrame() {
+        this.listModel = new DefaultListModel();
         initComponents();
-        listWord.setModel(listModel);
-        
         showWord();
     }
     
-    private void showWord() {
+    /** Ham show toan bo tu ra list */
+    private void showWord() {        
         List<Dictionary> wordList = DictionaryManagement.findAll();
-        
         wordList.forEach(dictionary -> {
             listModel.addElement(dictionary.getWord());
         });
+        
+        listWord.setModel(listModel);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,6 +70,11 @@ public class DictionaryJFrame extends javax.swing.JFrame {
             }
         });
 
+        listWord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listWordMouseClicked(evt);
+            }
+        });
         listWord.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 listWordKeyTyped(evt);
@@ -162,6 +169,10 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     private void listWordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listWordKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_listWordKeyTyped
+
+    private void listWordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listWordMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listWordMouseClicked
 
     /**
      * @param args the command line arguments

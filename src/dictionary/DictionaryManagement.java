@@ -61,4 +61,12 @@ public class DictionaryManagement {
         
         return wordList;
     }
+    
+    public static void main(String[] args) {
+        List<Dictionary> wordList = DictionaryManagement.findAll();
+        
+        wordList.forEach(dictionary -> {
+            System.out.println(dictionary.getWord());
+        });
+    }
 }
