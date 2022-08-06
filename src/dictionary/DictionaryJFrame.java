@@ -4,6 +4,9 @@
  */
 package dictionary;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -15,10 +18,10 @@ import javax.swing.border.EmptyBorder;
  * @author Thanh Tung Hoang
  */
 public class DictionaryJFrame extends javax.swing.JFrame {
+
     private final DefaultListModel listModel;
     List<Dictionary> wordList = new ArrayList<>();
     int selectId = -1;
-    
 
     /**
      * Creates new form DictionaryJFrame
@@ -26,30 +29,11 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     public DictionaryJFrame() {
         this.listModel = new DefaultListModel();
 
-        
         initComponents();
         showWord();
         setPaddingTextArea();
     }
-    
-    /** Ham show toan bo tu ra list */
-    private void showWord() {        
-        wordList = DictionaryManagement.findAll();
-        wordList.forEach(dictionary -> {
-            listModel.addElement(dictionary.getWord());
-        });
-        
-        listWord.setModel(listModel);
-    }
-    
-    /** Set padding cho translate field */
-    private void setPaddingTextArea() {
-        translateField.setBorder(BorderFactory.createCompoundBorder(
-        translateField.getBorder(), 
-        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-    }
-  
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,7 +44,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        searchTitle = new javax.swing.JLabel();
         searchInput = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -70,17 +54,26 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Keyword:");
+        searchTitle.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        searchTitle.setText("Keyword:");
 
+        searchInput.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         searchInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchInputActionPerformed(evt);
             }
         });
+        searchInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                searchInputPressedEnter(evt);
+            }
+        });
 
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,9 +111,9 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchInput, javax.swing.GroupLayout.PREFERRED_SIZE, 734, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchInput, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(btnSearch)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -128,26 +121,39 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(searchInput, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))))
+                    .addComponent(searchTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchInput, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)))
         );
 
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnDelete.setText("Delete");
 
+        btnEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnEdit.setText("Edit");
 
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnAdd.setText("Add");
         btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnReset.setText("Reset");
+        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnResetMousePressed(evt);
+            }
+        });
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,13 +164,15 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(37, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(btnDelete)
-                .addGap(321, 321, 321)
+                .addGap(38, 38, 38)
                 .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnReset)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEdit)
-                .addGap(46, 46, 46))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete)
+                .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,41 +183,117 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addGap(49, 49, 49))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Ham show toan bo tu ra list
+     */
+    private void showWord() {
+        wordList = DictionaryManagement.findAll();
+        wordList.forEach(dictionary -> {
+            listModel.addElement(dictionary.getWord());
+        });
+
+        listWord.setModel(listModel);
+    }
+
+    /**
+     * Set padding cho translate field
+     */
+    private void setPaddingTextArea() {
+        translateField.setBorder(BorderFactory.createCompoundBorder(
+                translateField.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+    }
+    
+    /**
+     * Xu ly tim kiem sau khi nhap keyword va bam search
+     */
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        listModel.removeAllElements();
+        translateField.setText("");
+
+        String searchKey = searchInput.getText();
+        wordList = DictionaryManagement.findAll();
+
+        wordList.forEach(dictionary -> {
+            String word = dictionary.getWord();
+            if (word.contains(searchKey)) {
+                listModel.addElement(dictionary.getWord());
+            }
+        });
+
+        listWord.setModel(listModel);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void searchInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchInputActionPerformed
 
+    /** Xu ly dich nghia tung tu duoc click */
     private void listWordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listWordMousePressed
         translateField.setText("");
+
         selectId = listWord.getSelectedIndex();
         String translate = "";
         String example = "";
         String exampleTranslate = "";
-        
+
         if (selectId >= 0) {
             Dictionary word = wordList.get(selectId);
             translate = word.getTranslate();
             example = word.getExample();
             exampleTranslate = word.getExampleTranslate();
         }
-        
-        /** Hien thi phan dich nghia ra text field */
-        translateField.setText(translateField.getText() + "Dịch nghĩa:" 
-                + "\r\n" + "   => " + translate + "\r\n" + "\r\n" 
+
+        /**
+         * Hien thi phan dich nghia ra text field
+         */
+        translateField.setText(translateField.getText() + "Dịch nghĩa:"
+                + "\r\n" + "   => " + translate + "\r\n" + "\r\n"
                 + "Ví dụ:" + "\r\n" + "   " + example + "\r\n"
                 + "   => " + exampleTranslate);
     }//GEN-LAST:event_listWordMousePressed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    /**
+     * Xu ly su kien khi bam nut reset
+     */
+    private void btnResetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMousePressed
+        listModel.removeAllElements();
+        showWord();
+        translateField.setText("");
+        searchInput.setText("");
+    }//GEN-LAST:event_btnResetMousePressed
+
+    /** Xu ly tim kiem sau khi nhap keyword va bam enter */
+    private void searchInputPressedEnter(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchInputPressedEnter
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            listModel.removeAllElements();
+            translateField.setText("");
+
+            String searchKey = searchInput.getText();
+            wordList = DictionaryManagement.findAll();
+
+            wordList.forEach(dictionary -> {
+                String word = dictionary.getWord();
+                if (word.contains(searchKey)) {
+                    listModel.addElement(dictionary.getWord());
+                }
+            });
+
+            listWord.setModel(listModel);
+        }
+    }//GEN-LAST:event_searchInputPressedEnter
 
     /**
      * @param args the command line arguments
@@ -250,13 +334,14 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listWord;
     private javax.swing.JTextField searchInput;
+    private javax.swing.JLabel searchTitle;
     private javax.swing.JTextArea translateField;
     // End of variables declaration//GEN-END:variables
 }
