@@ -27,6 +27,7 @@ public class DictionaryManagement {
         List<Dictionary> wordList = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
+        
         try {
             connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             
@@ -35,9 +36,10 @@ public class DictionaryManagement {
             ResultSet resultSet = statement.executeQuery("select * from words");
             
             while (resultSet.next()) {
-                Dictionary dic = new Dictionary(resultSet.getInt("id"),
-                    resultSet.getString("word"), resultSet.getString("translate"),
-                    resultSet.getString("example"));
+                Dictionary dic;
+                dic = new Dictionary(resultSet.getInt("id"),
+                        resultSet.getString("word"), resultSet.getString("translate"),
+                        resultSet.getString("example"), resultSet.getString("example_translate"));
                 wordList.add(dic); 
             }
         } catch (SQLException ex) {
