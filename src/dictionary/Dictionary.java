@@ -11,19 +11,24 @@ package dictionary;
  */
 public class Dictionary {
     int id;
-    String word, translate, example;
+    String word;
+    String translate;
+    String example;
+    String exampleTranslate;
 
-    public Dictionary(int id, String word, String translate, String example) {
+    public Dictionary(int id, String word, String translate, String example, String exampleTranslate) {
         this.id = id;
         this.word = word;
         this.translate = translate;
         this.example = example;
+        this.exampleTranslate = exampleTranslate;
     }
 
-    public Dictionary(String word, String translate, String example) {
+    public Dictionary(String word, String translate, String example, String exampleTranslate) {
         this.word = word;
         this.translate = translate;
         this.example = example;
+        this.exampleTranslate = exampleTranslate;
     }
 
     public int getId() {
@@ -56,5 +61,13 @@ public class Dictionary {
 
     public void setExample(String example) {
         this.example = example;
+    }
+    
+    public String getExampleTranslate() {
+        return exampleTranslate;
+    }
+
+    public void setExampleTranslate(String exampleTranslate) {
+        this.exampleTranslate = exampleTranslate;
     }
 }
