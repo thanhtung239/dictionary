@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * @author Thanh Tung Hoang
  */
 public class DictionaryManagement {
+
     private static String DB_URL = "jdbc:mysql://localhost:3306/dictionary";
     private static String USER_NAME = "root";
     private static String PASSWORD = "";
@@ -27,20 +28,22 @@ public class DictionaryManagement {
         List<Dictionary> wordList = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
-        
+
         try {
             connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
-            
-            /** Query. */
+
+            /**
+             * Query.
+             */
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from words");
-            
+
             while (resultSet.next()) {
                 Dictionary dic;
                 dic = new Dictionary(resultSet.getInt("id"),
                         resultSet.getString("word"), resultSet.getString("translate"),
                         resultSet.getString("example"), resultSet.getString("example_translate"));
-                wordList.add(dic); 
+                wordList.add(dic);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,10 +63,10 @@ public class DictionaryManagement {
                 }
             }
         }
-        
+
         return wordList;
     }
-    
+
     public static void insert(Dictionary word) {
         Connection connection = null;
         Statement statement = null;
@@ -71,16 +74,51 @@ public class DictionaryManagement {
         String translate = word.getTranslate();
         String example = word.getExample();
         String exampleTranslate = word.getExampleTranslate();
-        
+
         try {
             connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
-            
-            /** Query. */
+
+            /**
+             * Query.
+             */
             statement = connection.createStatement();
-            String sql = "INSERT INTO words(word, translate, example, example_translate) " 
-                    + "VALUES('" + newWord + "', '" 
+            String sql = "INSERT INTO words(word, translate, example, example_translate) "
+                    + "VALUES('" + newWord + "', '"
                     + translate + "', '" + example + "', '" + exampleTranslate + "')";
-            statement.executeUpdate(sql);    
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
+    public static void delete(int wordId) {
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+
+            /**
+             * Query.
+             */
+            statement = connection.createStatement();
+            String sql = "DELETE FROM words WHERE id = " + wordId;
+            statement.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
