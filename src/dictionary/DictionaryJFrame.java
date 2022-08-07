@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -137,6 +138,11 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         btnDelete.setBackground(new java.awt.Color(204, 0, 51));
         btnDelete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnDelete.setText("Delete");
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnDeleteMousePressed(evt);
+            }
+        });
 
         btnEdit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnEdit.setText("Edit");
@@ -206,6 +212,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         translateField.setText("");
         searchInput.setText("");
     }
+
     /**
      * Ham show toan bo tu ra list
      */
@@ -226,7 +233,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                 translateField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
     }
-    
+
     /**
      * Xu ly tim kiem sau khi nhap keyword va bam search
      */
@@ -251,7 +258,9 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchInputActionPerformed
 
-    /** Xu ly dich nghia tung tu duoc click */
+    /**
+     * Xu ly dich nghia tung tu duoc click
+     */
     private void listWordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listWordMousePressed
         translateField.setText("");
 
@@ -287,7 +296,9 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         reloadJframe();
     }//GEN-LAST:event_btnResetMousePressed
 
-    /** Xu ly tim kiem sau khi nhap keyword va bam enter */
+    /**
+     * Xu ly tim kiem sau khi nhap keyword va bam enter
+     */
     private void searchInputPressedEnter(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchInputPressedEnter
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             listModel.removeAllElements();
@@ -307,12 +318,32 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchInputPressedEnter
 
-    /** Mo form nhap tu moi khi bam nut add */
+    /**
+     * Mo form nhap tu moi khi bam nut add
+     */
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         AddNewWordJFrame addFormJframe = new AddNewWordJFrame();
         addFormJframe.setLocationRelativeTo(null);
         addFormJframe.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
+
+    /**
+     * Xu ly xoa tu
+     */
+    private void btnDeleteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMousePressed
+        selectId = listWord.getSelectedIndex();
+
+        if (selectId >= 0) {
+            Dictionary word = wordList.get(selectId);
+            int wordId = word.getId();
+            int option = JOptionPane.showConfirmDialog(this, "Do you want to delete this item ?");
+
+            if (option == 0) {
+                DictionaryManagement.delete(wordId);
+                reloadJframe();
+            }
+        }
+    }//GEN-LAST:event_btnDeleteMousePressed
 
     /**
      * @param args the command line arguments
