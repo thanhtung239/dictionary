@@ -23,7 +23,7 @@ public class DictionaryManagement {
     private static String USER_NAME = "root";
     private static String PASSWORD = "";
 
-    public static List<Dictionary> findAll() {
+    public static List<Dictionary> getAll() {
         List<Dictionary> wordList = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
@@ -64,11 +64,40 @@ public class DictionaryManagement {
         return wordList;
     }
     
-    public static void main(String[] args) {
-        List<Dictionary> wordList = DictionaryManagement.findAll();
+    public static void insert(Dictionary word) {
+        Connection connection = null;
+        Statement statement = null;
+        String newWord = word.getWord();
+        String translate = word.getTranslate();
+        String example = word.getExample();
+        String exampleTranslate = word.getExampleTranslate();
         
-        wordList.forEach(dictionary -> {
-            System.out.println(dictionary.getWord());
-        });
+        try {
+            connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+            
+            /** Query. */
+            statement = connection.createStatement();
+            String sql = "INSERT INTO words(word, translate, example, example_translate) " 
+                    + "VALUES('" + newWord + "', '" 
+                    + translate + "', '" + example + "', '" + exampleTranslate + "')";
+            statement.executeUpdate(sql);    
+        } catch (SQLException ex) {
+            Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 }

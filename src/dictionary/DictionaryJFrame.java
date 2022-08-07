@@ -57,6 +57,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Dictionary");
 
         searchTitle.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         searchTitle.setText("Keyword:");
@@ -83,6 +84,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
 
         listWord.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         listWord.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        listWord.setInheritsPopupMenu(true);
         listWord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 listWordMousePressed(evt);
@@ -132,6 +134,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)))
         );
 
+        btnDelete.setBackground(new java.awt.Color(204, 0, 51));
         btnDelete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnDelete.setText("Delete");
 
@@ -141,6 +144,11 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         btnAdd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnAdd.setText("Add");
         btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnReset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnReset.setText("Reset");
@@ -180,22 +188,29 @@ public class DictionaryJFrame extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(49, 49, 49))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void reloadJframe() {
+        listModel.removeAllElements();
+        showWord();
+        translateField.setText("");
+        searchInput.setText("");
+    }
     /**
      * Ham show toan bo tu ra list
      */
     private void showWord() {
-        wordList = DictionaryManagement.findAll();
+        wordList = DictionaryManagement.getAll();
         wordList.forEach(dictionary -> {
             listModel.addElement(dictionary.getWord());
         });
@@ -220,7 +235,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         translateField.setText("");
 
         String searchKey = searchInput.getText();
-        wordList = DictionaryManagement.findAll();
+        wordList = DictionaryManagement.getAll();
 
         wordList.forEach(dictionary -> {
             String word = dictionary.getWord();
@@ -269,10 +284,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
      * Xu ly su kien khi bam nut reset
      */
     private void btnResetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMousePressed
-        listModel.removeAllElements();
-        showWord();
-        translateField.setText("");
-        searchInput.setText("");
+        reloadJframe();
     }//GEN-LAST:event_btnResetMousePressed
 
     /** Xu ly tim kiem sau khi nhap keyword va bam enter */
@@ -282,7 +294,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
             translateField.setText("");
 
             String searchKey = searchInput.getText();
-            wordList = DictionaryManagement.findAll();
+            wordList = DictionaryManagement.getAll();
 
             wordList.forEach(dictionary -> {
                 String word = dictionary.getWord();
@@ -294,6 +306,13 @@ public class DictionaryJFrame extends javax.swing.JFrame {
             listWord.setModel(listModel);
         }
     }//GEN-LAST:event_searchInputPressedEnter
+
+    /** Mo form nhap tu moi khi bam nut add */
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        AddNewWordJFrame addFormJframe = new AddNewWordJFrame();
+        addFormJframe.setLocationRelativeTo(null);
+        addFormJframe.setVisible(true);
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,7 +344,10 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DictionaryJFrame().setVisible(true);
+                DictionaryJFrame dictionaryJFrame = new DictionaryJFrame();
+                dictionaryJFrame.setDefaultCloseOperation(dictionaryJFrame.EXIT_ON_CLOSE);
+                dictionaryJFrame.setLocationRelativeTo(null);
+                dictionaryJFrame.setVisible(true);
             }
         });
     }
