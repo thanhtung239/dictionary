@@ -62,7 +62,7 @@ public class Dictionary {
     public void setExample(String example) {
         this.example = example;
     }
-    
+
     public String getExampleTranslate() {
         return exampleTranslate;
     }

@@ -4,6 +4,7 @@
  */
 package dictionary;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,6 +28,11 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     /**
      * Creates new form DictionaryJFrame
      */
+    public static int idEdit;
+    public static String wordEdit;
+    public static String translateEdit;
+    public static String exampleEdit;
+    public static String exampleTranslateEdit;
     public DictionaryJFrame() {
         this.listModel = new DefaultListModel();
 
@@ -64,6 +70,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         searchTitle.setText("Keyword:");
 
         searchInput.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        searchInput.setText("");
         searchInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchInputActionPerformed(evt);
@@ -153,6 +160,12 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
+            }
+        });
+
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
             }
         });
 
@@ -326,6 +339,23 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         addFormJframe.setLocationRelativeTo(null);
         addFormJframe.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {
+        selectId = listWord.getSelectedIndex();
+
+        if(selectId >= 0) {
+            Dictionary word = wordList.get(selectId);
+            idEdit = word.getId();
+            wordEdit = word.getWord();
+            translateEdit = word.getTranslate();
+            exampleEdit = word.getExample();
+            exampleTranslateEdit = word.getExampleTranslate();
+
+            EditJFrame editFormJFrame = new EditJFrame(idEdit);
+            editFormJFrame.setLocationRelativeTo(null);
+            editFormJFrame.setVisible(true);
+        }
+    }
 
     /**
      * Xu ly xoa tu
