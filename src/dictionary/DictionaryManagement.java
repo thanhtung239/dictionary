@@ -106,6 +106,27 @@ public class DictionaryManagement {
         }
     }
 
+    public static void edit(int wordIdEdit, Dictionary word) {
+        Connection connection = null;
+        Statement statement = null;
+        String newWord = word.getWord();
+        String translate = word.getTranslate();
+        String example = word.getExample();
+        String exampleTranslate = word.getExampleTranslate();
+        try {
+            connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+            statement = connection.createStatement();
+            String sql = "update words set word='" + newWord
+                    + "', translate='" + translate
+                    + "', example_translate='"+ exampleTranslate
+                    + "', example='" + example
+                    + "'where id=" + wordIdEdit;
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void delete(int wordId) {
         Connection connection = null;
         Statement statement = null;
