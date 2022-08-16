@@ -250,12 +250,12 @@ public class DictionaryJFrame extends javax.swing.JFrame {
     /**
      * Xu ly tim kiem sau khi nhap keyword va bam search
      */
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
         listModel.removeAllElements();
         translateField.setText("");
 
         String searchKey = searchInput.getText();
-        wordList = DictionaryManagement.getAll();
+        wordList = DictionaryManagement.search(searchKey);
 
         wordList.forEach(dictionary -> {
             String word = dictionary.getWord();
@@ -265,7 +265,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
         });
 
         listWord.setModel(listModel);
-    }//GEN-LAST:event_btnSearchActionPerformed
+    }
 
     private void searchInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchInputActionPerformed
         // TODO add your handling code here:
@@ -318,7 +318,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
             translateField.setText("");
 
             String searchKey = searchInput.getText();
-            wordList = DictionaryManagement.getAll();
+            wordList = DictionaryManagement.search(searchKey);
 
             wordList.forEach(dictionary -> {
                 String word = dictionary.getWord();
@@ -342,7 +342,7 @@ public class DictionaryJFrame extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {
         selectId = listWord.getSelectedIndex();
-
+            
         if(selectId >= 0) {
             Dictionary word = wordList.get(selectId);
             idEdit = word.getId();
