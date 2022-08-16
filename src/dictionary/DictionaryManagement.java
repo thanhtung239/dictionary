@@ -67,6 +67,49 @@ public class DictionaryManagement {
         return wordList;
     }
 
+    public static List<Dictionary> search(String searchKey) {
+        List<Dictionary> wordList = new ArrayList<>();
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+
+            /**
+             * Query.
+             */
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from words where word='" + searchKey + "'");
+
+            while (resultSet.next()) {
+                Dictionary dic;
+                dic = new Dictionary(resultSet.getInt("id"),
+                        resultSet.getString("word"), resultSet.getString("translate"),
+                        resultSet.getString("example"), resultSet.getString("example_translate"));
+                wordList.add(dic);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DictionaryManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return wordList;
+    }
+
     public static void insert(Dictionary word) {
         Connection connection = null;
         Statement statement = null;
@@ -118,7 +161,7 @@ public class DictionaryManagement {
             statement = connection.createStatement();
             String sql = "update words set word='" + newWord
                     + "', translate='" + translate
-                    + "', example_translate='"+ exampleTranslate
+                    + "', example_translate='" + exampleTranslate
                     + "', example='" + example
                     + "'where id=" + wordIdEdit;
             statement.executeUpdate(sql);

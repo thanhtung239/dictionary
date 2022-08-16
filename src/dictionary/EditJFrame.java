@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -168,6 +169,13 @@ public class EditJFrame extends javax.swing.JFrame {
         if (option == 0) {
             Dictionary word = new Dictionary(wordEdit, translateEdit, exampleEdit, exampleTranslateEdit);
             DictionaryManagement.edit(wordIdEdit, word);
+            JFrame frame = new JFrame();
+            JOptionPane.showMessageDialog(frame,
+                    "Successfully edit!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            super.dispose();
             // reloadJframe();
         }
     };

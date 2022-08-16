@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch DictionaryJFrame",
+            "request": "launch",
+            "mainClass": "dictionary.DictionaryJFrame",
+            "projectName": "dictionary_31970893"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
